@@ -5,7 +5,7 @@
 }
 
 /* The default mod display, this is the <ul> element */
-.block_flexpagemod_default {
+.block_flexpagemod_default ul {
     margin: 0;
 }
 
@@ -17,4 +17,11 @@
 /* The default mod display, no indenting */
 .block_flexpagemod_default .mod-indent {
     margin-left: 0;
+}
+
+/* The default mod display, no move edit widgets */
+.block_flexpagemod_default .editing_moveleft,
+.block_flexpagemod_default .editing_moveright,
+.block_flexpagemod_default .editing_move {
+    display: none;
 }

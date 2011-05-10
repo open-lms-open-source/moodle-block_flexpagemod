@@ -85,13 +85,20 @@ class block_flexpagemod_lib_mod {
      * @return void
      */
     public function setup_block() {
+        global $PAGE;
+
+        // If we are editing, use default display for edit widgets
+        if ($PAGE->user_is_editing()) {
+            $this->default_block_setup();
+
         // Check if we are not visible to the user
-        if (!$this->get_cm()->uservisible) {
+        } else if (!$this->get_cm()->uservisible) {
             // If we have availability information, we do default display
             if ($this->get_cm()->showavailability and !empty($this->get_cm()->availableinfo)) {
                 $this->default_block_setup();
             }
         } else {
+            // Allow module custom display
             $this->module_block_setup();
         }
     }
@@ -111,7 +118,7 @@ class block_flexpagemod_lib_mod {
      * @return void
      */
     public function default_block_setup() {
-        global $CFG, $USER, $OUTPUT;
+        global $CFG, $PAGE, $USER, $OUTPUT;
 
         // Fake a bunch of variables for the copied code
         $tl = textlib_get_instance();
@@ -124,7 +131,7 @@ class block_flexpagemod_lib_mod {
         $ismoving = false;
         $hidecompletion = false;
         $absolute = false;
-        $isediting = false;  // @todo Don't think we ever want this to be on
+        $isediting = $PAGE->user_is_editing();
         $customicon = false;
         $groupbuttons = ($course->groupmode or (!$course->groupmodeforce));
         $groupbuttonslink = (!$course->groupmodeforce);
@@ -455,9 +462,9 @@ class block_flexpagemod_lib_mod {
         ob_end_clean();
 
         if (!empty($output)) {
-            $this->get_block()->content->text = html_writer::tag(
-                'ul', $output, array('class' => 'section img-text block_flexpagemod_default')
-            );
+            $output = html_writer::tag('ul', $output, array('class' => 'section img-text'));
+            $output = html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default'));
+            $this->get_block()->content->text = $output;
         }
     }
 }

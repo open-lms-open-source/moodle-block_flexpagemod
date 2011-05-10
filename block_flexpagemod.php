@@ -35,9 +35,9 @@ class block_flexpagemod extends block_base {
 
         try {
             $modinfo = get_fast_modinfo($this->page->course);
-            $modinfo->get_cm($this->config->cmid);
+            $cm      = $modinfo->get_cm($this->config->cmid);
 
-            $mod = block_flexpagemod_lib_mod::factory($modinfo->get_cm($this->config->cmid), $this);
+            $mod = block_flexpagemod_lib_mod::factory($cm, $this);
             $mod->setup_block();
 
         } catch (moodle_exception $e) {
@@ -88,4 +88,33 @@ class block_flexpagemod extends block_base {
     function hide_header() {
         return true;
     }
+
+    /**
+     * Allow multiples
+     *
+     * @return bool
+     */
+    function instance_allow_multiple() {
+        return true;
+    }
+
+    /**
+     * Add another class to help distinguish between activities
+     *
+     * @return array
+     */
+    function html_attributes() {
+        $attributes = parent::html_attributes();
+
+        try {
+            $modinfo = get_fast_modinfo($this->page->course);
+            $cm      = $modinfo->get_cm($this->config->cmid);
+            $attributes['class'] .= ' block_flexpagemod_'.$cm->modname;
+        } catch (Exception $e) {
+            $attributes['class'] .= ' block_flexpagemod_unknown';
+        }
+        return $attributes;
+    }
+
+
 }
