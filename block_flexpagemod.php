@@ -116,5 +116,30 @@ class block_flexpagemod extends block_base {
         return $attributes;
     }
 
+    /**
+     * Have to override so the cmid can be saved to table
+     */
+    function instance_config_save($data, $nolongerused = false) {
+        $this->save_cmid($data->cmid);
+        parent::instance_config_save($data, $nolongerused);
+    }
 
+    /**
+     * Save course module ID to table.  Needed for queries.
+     *
+     * @param int $cmid
+     * @return void
+     */
+    function save_cmid($cmid) {
+        global $DB;
+
+        if ($id = $DB->get_field('block_flexpagemod', 'id', array('instanceid' => $this->instance->id))) {
+            $DB->set_field('block_flexpagemod', 'cmid', $cmid, array('id' => $id));
+        } else {
+            $DB->insert_record('block_flexpagemod', (object) array(
+                'instanceid' => $this->instance->id,
+                'cmid' => $cmid,
+            ));
+        }
+    }
 }
