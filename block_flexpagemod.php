@@ -142,4 +142,37 @@ class block_flexpagemod extends block_base {
             ));
         }
     }
+
+    /**
+     * A way to associate a new instance with a cmid via session
+     *
+     * @return void
+     */
+    function instance_create() {
+        global $SESSION;
+
+        if (!empty($SESSION->block_flexpagemod_create_cmids)) {
+            $cmid = array_shift($SESSION->block_flexpagemod_create_cmids);
+            if (!empty($cmid)) {
+                $this->instance_config_save((object) array('cmid' => $cmid));
+            }
+            if (empty($SESSION->block_flexpagemod_create_cmids)) {
+                unset($SESSION->block_flexpagemod_create_cmids);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Clean table
+     *
+     * @return bool
+     */
+    function instance_delete() {
+        global $DB;
+
+        $DB->delete_records('block_flexpagemod', array('instanceid' => $this->instance->id));
+
+        return true;
+    }
 }
