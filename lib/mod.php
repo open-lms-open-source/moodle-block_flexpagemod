@@ -104,6 +104,28 @@ class block_flexpagemod_lib_mod {
     }
 
     /**
+     * Append text to the block's main content area
+     *
+     * @param string $content
+     * @return block_flexpagemod_lib_mod
+     */
+    public function append_content($content) {
+        $this->get_block()->content->text .= $content;
+        return $this;
+    }
+
+    /**
+     * Append text to the block's footer area
+     *
+     * @param string $content
+     * @return block_flexpagemod_lib_mod
+     */
+    public function append_footer($content) {
+        $this->get_block()->content->footer .= $content;
+        return $this;
+    }
+
+    /**
      * Customized block setup for a particular module
      *
      * @return void
@@ -464,7 +486,7 @@ class block_flexpagemod_lib_mod {
         if (!empty($output)) {
             $output = html_writer::tag('ul', $output, array('class' => 'section img-text'));
             $output = html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default'));
-            $this->get_block()->content->text = $output;
+            $this->append_content($output);
         }
     }
 }

@@ -25,3 +25,8 @@
 .block_flexpagemod_default .editing_move {
     display: none;
 }
+
+/* For page module */
+.block_flexpagemod_page .modified {
+    font-size: 0.6em;
+}
