@@ -29,20 +29,30 @@
     display: none;
 }
 
+/* Have module edit widgets dimmed */
+.editing .block_flexpagemod_default li.activity .commands,
+.editing .block_flexpagemod_commands .commands {
+    opacity: 0.25;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=25%)";
+    filter:alpha(opacity=25);
+    z-index: 2;
+}
+
+/* Have module edit widgets show without dim on hover */
+.editing .block_flexpagemod_default li:hover.activity .commands,
+.editing .block_flexpagemod_commands:hover .commands {
+    opacity: 1;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter:alpha(opacity=100);
+}
+
+/* Float commands to the right */
+.editing .block_flexpagemod_commands .commands {
+    float: right;
+}
+
 /* For page module */
 .block_flexpagemod_page .modified {
     font-size: 0.6em;
 }
 
-.block_flexpagemod_commands .commands {
-    opacity: 0.25;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=25%)";
-    filter:alpha(opacity=25);
-    z-index: 2;
-    float: right;
-}
-.block_flexpagemod_commands:hover .commands {
-    opacity: 1;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter:alpha(opacity=100);
-}
