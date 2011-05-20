@@ -8,6 +8,13 @@
  */
 class block_flexpagemod_lib_mod {
     /**
+     * Determine if the default rendering was used or not
+     *
+     * @var bool
+     */
+    protected $defaultused = false;
+
+    /**
      * @var cm_info
      */
     protected $cm;
@@ -85,14 +92,8 @@ class block_flexpagemod_lib_mod {
      * @return void
      */
     public function setup_block() {
-        global $PAGE;
-
-        // If we are editing, use default display for edit widgets
-        if ($PAGE->user_is_editing()) {
-            $this->default_block_setup();
-
         // Check if we are not visible to the user
-        } else if (!$this->get_cm()->uservisible) {
+        if (!$this->get_cm()->uservisible) {
             // If we have availability information, we do default display
             if ($this->get_cm()->showavailability and !empty($this->get_cm()->availableinfo)) {
                 $this->default_block_setup();
@@ -100,6 +101,7 @@ class block_flexpagemod_lib_mod {
         } else {
             // Allow module custom display
             $this->module_block_setup();
+            $this->add_mod_commands();
         }
     }
 
@@ -126,6 +128,37 @@ class block_flexpagemod_lib_mod {
     }
 
     /**
+     * Add module commands when not using default rendering
+     *
+     * Must be called after block text has been completely filled.
+     *
+     * @return void
+     */
+    public function add_mod_commands() {
+        if (!$this->defaultused) {
+            $mod = $this->get_cm();
+            $course = $this->get_block()->page->course;
+            $groupbuttons = ($course->groupmode or (!$course->groupmodeforce));
+            $groupbuttonslink = (!$course->groupmodeforce);
+
+            if ($groupbuttons and plugin_supports('mod', $mod->modname, FEATURE_GROUPS, 0)) {
+                if (!$mod->groupmodelink = $groupbuttonslink) {
+                    $mod->groupmode = $course->groupmode;
+                }
+            } else {
+                $mod->groupmode = false;
+            }
+            $buttons = make_editing_buttons($mod, false, true, $mod->indent, $mod->sectionnum);
+
+            $this->get_block()->content->text = html_writer::tag(
+                'div',
+                $buttons.$this->get_block()->content->text,
+                array('class' => 'block_flexpagemod_commands')
+            );
+        }
+    }
+
+    /**
      * Customized block setup for a particular module
      *
      * @return void
@@ -141,6 +174,9 @@ class block_flexpagemod_lib_mod {
      */
     public function default_block_setup() {
         global $CFG, $PAGE, $USER, $OUTPUT;
+
+        // Mark our flag
+        $this->defaultused = true;
 
         // Fake a bunch of variables for the copied code
         $tl = textlib_get_instance();

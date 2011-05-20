@@ -20,6 +20,9 @@
 }
 
 /* The default mod display, no move edit widgets */
+.block_flexpagemod_commands .editing_moveleft,
+.block_flexpagemod_commands .editing_moveright,
+.block_flexpagemod_commands .editing_move,
 .block_flexpagemod_default .editing_moveleft,
 .block_flexpagemod_default .editing_moveright,
 .block_flexpagemod_default .editing_move {
@@ -29,4 +32,17 @@
 /* For page module */
 .block_flexpagemod_page .modified {
     font-size: 0.6em;
+}
+
+.block_flexpagemod_commands .commands {
+    opacity: 0.25;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=25%)";
+    filter:alpha(opacity=25);
+    z-index: 2;
+    float: right;
+}
+.block_flexpagemod_commands:hover .commands {
+    opacity: 1;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter:alpha(opacity=100);
 }
