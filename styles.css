@@ -40,7 +40,7 @@
 
 /* Have module edit widgets show without dim on hover */
 .editing .block_flexpagemod_default li:hover.activity .commands,
-.editing .block_flexpagemod_commands:hover .commands {
+.editing .block_flexpagemod_commands_wrapper:hover .commands {
     opacity: 1;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100%)";
     filter: alpha(opacity=100);
