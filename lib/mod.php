@@ -135,7 +135,9 @@ class block_flexpagemod_lib_mod {
      * @return void
      */
     public function add_mod_commands() {
-        if (!$this->defaultused) {
+        global $PAGE;
+
+        if (!$this->defaultused and $PAGE->user_is_editing()) {
             $mod = $this->get_cm();
             $course = $this->get_block()->page->course;
             $groupbuttons = ($course->groupmode or (!$course->groupmodeforce));
