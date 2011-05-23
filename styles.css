@@ -47,6 +47,7 @@
 }
 
 /* Float commands to the right */
+.editing .block_flexpagemod_label .content .commands,
 .editing .block_flexpagemod_commands .commands {
     float: right;
 }
