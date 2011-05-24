@@ -106,12 +106,14 @@ class block_flexpagemod extends block_base {
     function html_attributes() {
         $attributes = parent::html_attributes();
 
-        try {
-            $modinfo = get_fast_modinfo($this->page->course);
-            $cm      = $modinfo->get_cm($this->config->cmid);
-            $attributes['class'] .= ' block_flexpagemod_'.$cm->modname;
-        } catch (Exception $e) {
-            $attributes['class'] .= ' block_flexpagemod_unknown';
+        if (!empty($this->config->cmid)) {
+            try {
+                $modinfo = get_fast_modinfo($this->page->course);
+                $cm      = $modinfo->get_cm($this->config->cmid);
+                $attributes['class'] .= ' block_flexpagemod_'.$cm->modname;
+            } catch (Exception $e) {
+                $attributes['class'] .= ' block_flexpagemod_unknown';
+            }
         }
         return $attributes;
     }
