@@ -1,6 +1,9 @@
 <?php
 /**
  * Flexpagemod Restore Task
+ *
+ * @author Mark Nielsen
+ * @package format_flexpage
  */
 class restore_flexpagemod_block_task extends restore_default_block_task {
     /**

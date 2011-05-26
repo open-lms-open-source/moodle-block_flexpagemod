@@ -1,6 +1,9 @@
 <?php
 /**
  * Display mod/folder
+ *
+ * @author Mark Nielsen
+ * @package format_flexpage
  */
 class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
     /**

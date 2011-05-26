@@ -1,6 +1,9 @@
 <?php
 /**
  * Display mod/forum
+ *
+ * @author Mark Nielsen
+ * @package format_flexpage
  */
 class block_flexpagemod_lib_mod_forum extends block_flexpagemod_lib_mod {
     public function module_block_setup() {
