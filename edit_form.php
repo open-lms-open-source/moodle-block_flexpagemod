@@ -8,9 +8,9 @@
 class block_flexpagemod_edit_form extends block_edit_form {
     /**
      * Add block specific configuration elements
+     * @param MoodleQuickForm $mform
      */
     protected function specific_definition($mform) {
-        $mform     = $this->_form;
         $modinfo   = get_fast_modinfo($this->page->course);
         $optgroups = array();
         foreach ($modinfo->get_instances() as $module => $instances) {
