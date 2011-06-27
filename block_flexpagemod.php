@@ -148,7 +148,7 @@ class block_flexpagemod extends block_base {
     /**
      * A way to associate a new instance with a cmid via session
      *
-     * @return void
+     * @return boolean
      */
     function instance_create() {
         global $SESSION;
