@@ -59,9 +59,7 @@ class block_flexpagemod extends block_base {
      * @return bool
      */
     function user_can_addto($page) {
-        global $COURSE;
-        
-        if($COURSE->format == 'flexpage'){
+        if($page->course->format == 'flexpage'){
             return has_capability('moodle/course:manageactivities', $page->context);
         } else {
             return false;
