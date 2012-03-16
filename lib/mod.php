@@ -191,7 +191,7 @@ class block_flexpagemod_lib_mod {
         $strmovehere = '';
         $ismoving = false;
         $hidecompletion = false;
-        $absolute = false;
+        $absolute = true;
         $isediting = $PAGE->user_is_editing();
         $customicon = false;
         $groupbuttons = ($course->groupmode or (!$course->groupmodeforce));
