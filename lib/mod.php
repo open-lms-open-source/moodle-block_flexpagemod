@@ -150,7 +150,7 @@ class block_flexpagemod_lib_mod {
             } else {
                 $mod->groupmode = false;
             }
-            $buttons = make_editing_buttons($mod, false, true, $mod->indent, $mod->sectionnum);
+            $buttons = make_editing_buttons($mod, true, true, $mod->indent, $mod->sectionnum);
             $buttons = html_writer::tag('div', $buttons, array('class' => 'block_flexpagemod_commands'));
 
             $this->get_block()->content->text = html_writer::tag(
