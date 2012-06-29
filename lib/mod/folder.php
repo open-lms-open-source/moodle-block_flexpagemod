@@ -17,7 +17,7 @@
  *
  * @copyright Copyright (c) 2009 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU Public License
- * @package blocks/flexpagemod
+ * @package block_flexpagemod
  * @author Mark Nielsen
  */
 
