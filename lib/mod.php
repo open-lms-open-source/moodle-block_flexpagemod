@@ -227,9 +227,7 @@ class block_flexpagemod_lib_mod {
         /// FOLLOWING COPIED FROM print_section
         /// LOOK FOR "FLEXPAGE" FOR CHANGES
 
-            /**
-             * @var cm_info
-             */
+            /** @var $mod cm_info */
             $mod = $mods[$modnumber];
 
             if ($ismoving and $mod->id == $USER->activitycopy) {

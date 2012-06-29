@@ -34,7 +34,7 @@ class block_flexpagemod_lib_mod_url extends block_flexpagemod_lib_mod {
      * @return void
      */
     public function module_block_setup() {
-        global $CFG, $COURSE, $DB, $PAGE;
+        global $CFG, $COURSE, $DB;
 
         $cm      = $this->get_cm();
         $url     = $DB->get_record('url', array('id' => $cm->instance));
