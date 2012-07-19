@@ -34,7 +34,7 @@ class block_flexpagemod_lib_mod_url extends block_flexpagemod_lib_mod {
      * @return void
      */
     public function module_block_setup() {
-        global $CFG, $COURSE, $DB;
+        global $CFG, $COURSE, $DB, $PAGE;
 
         $cm      = $this->get_cm();
         $url     = $DB->get_record('url', array('id' => $cm->instance));
@@ -54,47 +54,28 @@ class block_flexpagemod_lib_mod_url extends block_flexpagemod_lib_mod {
             $fullurl  = url_get_full_url($url, $cm, $course);
             $title    = $url->name;
 
-            $link = html_writer::tag('a', $fullurl, array('href'=>str_replace('&amp;', '&', $fullurl)));
+            $link        = html_writer::tag('a', $fullurl, array('href'=> str_replace('&amp;', '&', $fullurl)));
             $clicktoopen = get_string('clicktoopen', 'url', $link);
+            $moodleurl   = new moodle_url($fullurl);
 
             $extension = resourcelib_get_extension($url->externalurl);
 
-            if (in_array($mimetype, array('image/gif','image/jpeg','image/png'))) {  // It's an image
+            $mediarenderer = $PAGE->get_renderer('core', 'media');
+            $embedoptions  = array(
+                core_media::OPTION_TRUSTED => true,
+                core_media::OPTION_BLOCK   => true
+            );
+
+            if (in_array($mimetype, array('image/gif', 'image/jpeg', 'image/png'))) { // It's an image
                 $code = resourcelib_embed_image($fullurl, $title);
 
-            } else if ($mimetype == 'audio/mp3') {
-                // MP3 audio file
-                $code = resourcelib_embed_mp3($fullurl, $title, $clicktoopen);
-
-            } else if ($mimetype == 'video/x-flv' or $extension === 'f4v') {
-                // Flash video file
-                $code = resourcelib_embed_flashvideo($fullurl, $title, $clicktoopen);
-
-            } else if ($mimetype == 'application/x-shockwave-flash') {
-                // Flash file
-                $code = resourcelib_embed_flash($fullurl, $title, $clicktoopen);
-
-            } else if (substr($mimetype, 0, 10) == 'video/x-ms') {
-                // Windows Media Player file
-                $code = resourcelib_embed_mediaplayer($fullurl, $title, $clicktoopen);
-
-            } else if ($mimetype == 'video/quicktime') {
-                // Quicktime file
-                $code = resourcelib_embed_quicktime($fullurl, $title, $clicktoopen);
-
-            } else if ($mimetype == 'video/mpeg') {
-                // Mpeg file
-                $code = resourcelib_embed_mpeg($fullurl, $title, $clicktoopen);
-
-            } else if ($mimetype == 'audio/x-pn-realaudio-plugin') {
-                // RealMedia file
-                $code = resourcelib_embed_real($fullurl, $title, $clicktoopen);
+            } else if ($mediarenderer->can_embed_url($moodleurl, $embedoptions)) {
+                // Media (audio/video) file.
+                $code = $mediarenderer->embed_url($moodleurl, $title, 0, 0, $embedoptions);
 
             } else {
                 // anything else - just try object tag enlarged as much as possible
-                // $code = resourcelib_embed_general($fullurl, $title, $clicktoopen, $mimetype);
-                $this->default_block_setup();
-                return;
+                $code = resourcelib_embed_general($fullurl, $title, $clicktoopen, $mimetype);
             }
 
             ob_start();
