@@ -204,7 +204,6 @@ class block_flexpagemod_lib_mod {
         $this->defaultused = true;
 
         // Fake a bunch of variables for the copied code
-        $tl = textlib_get_instance();
         $course = $this->get_block()->page->course;
         $completioninfo = new completion_info($course);
         $modinfo = get_fast_modinfo($course);
@@ -334,8 +333,8 @@ class block_flexpagemod_lib_mod {
             // Avoid unnecessary duplication: if e.g. a forum name already
             // includes the word forum (or Forum, etc) then it is unhelpful
             // to include that in the accessible description that is added.
-            if (false !== strpos($tl->strtolower($instancename),
-                    $tl->strtolower($altname))) {
+            if (false !== strpos(textlib::strtolower($instancename),
+                    textlib::strtolower($altname))) {
                 $altname = '';
             }
             // File type after name, for alphabetic lists (screen reader).
