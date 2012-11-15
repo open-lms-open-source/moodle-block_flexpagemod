@@ -25,7 +25,7 @@
  * Flexpagemod Restore Task
  *
  * @author Mark Nielsen
- * @package format_flexpage
+ * @package block_flexpagemod
  */
 class restore_flexpagemod_block_task extends restore_default_block_task {
 

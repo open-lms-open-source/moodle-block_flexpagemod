@@ -25,7 +25,7 @@
  * Block instance editing form
  *
  * @author Mark Nielsen
- * @package format_flexpage
+ * @package block_flexpagemod
  */
 class block_flexpagemod_edit_form extends block_edit_form {
     /**

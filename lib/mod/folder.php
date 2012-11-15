@@ -25,7 +25,7 @@
  * Display mod/folder
  *
  * @author Mark Nielsen
- * @package format_flexpage
+ * @package block_flexpagemod
  */
 class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
     /**
@@ -34,7 +34,7 @@ class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
      * @return void
      */
     public function module_block_setup() {
-        global $CFG, $COURSE, $DB, $PAGE;
+        global $CFG, $COURSE, $DB, $PAGE, $OUTPUT;
 
         $cm      = $this->get_cm();
         $folder  = $DB->get_record('folder', array('id' => $cm->instance));
@@ -48,25 +48,26 @@ class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
             $completion = new completion_info($course);
             $completion->set_module_viewed($cm);
 
-            $output = $PAGE->get_renderer('mod_folder');
+            /** @var $output block_flexpagemod_renderer */
+            $output = $PAGE->get_renderer('block_flexpagemod');
 
             ob_start();
-            echo $output->heading(format_string($folder->name), 2);
+            echo $OUTPUT->heading(format_string($folder->name), 2);
 
             if (trim(strip_tags($folder->intro))) {
-                echo $output->box_start('mod_introbox', 'pageintro');
+                echo $OUTPUT->box_start('mod_introbox', 'pageintro');
                 echo format_module_intro('folder', $folder, $cm->id);
-                echo $output->box_end();
+                echo $OUTPUT->box_end();
             }
 
-            echo $output->box_start('generalbox foldertree');
-            echo $output->folder_tree($folder, $cm, $course);
-            echo $output->box_end();
+            echo $OUTPUT->box_start('generalbox foldertree');
+            $output->folder_tree($folder, $cm, $course);
+            echo $OUTPUT->box_end();
 
             if (has_capability('mod/folder:managefiles', $context)) {
-                echo $output->container_start('mdl-align');
-                echo $output->single_button(new moodle_url('/mod/folder/edit.php', array('id'=>$cm->id)), get_string('edit'));
-                echo $output->container_end();
+                echo $OUTPUT->container_start('mdl-align');
+                echo $OUTPUT->single_button(new moodle_url('/mod/folder/edit.php', array('id'=>$cm->id)), get_string('edit'));
+                echo $OUTPUT->container_end();
             }
             $this->append_content(ob_get_contents());
             ob_end_clean();

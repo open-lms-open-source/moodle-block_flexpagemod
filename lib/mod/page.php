@@ -25,7 +25,7 @@
  * Display mod/page
  *
  * @author Mark Nielsen
- * @package format_flexpage
+ * @package block_flexpagemod
  */
 class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
     /**

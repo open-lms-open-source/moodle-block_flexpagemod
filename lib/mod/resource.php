@@ -25,7 +25,7 @@
  * Display mod/resource
  *
  * @author Mark Nielsen
- * @package format_flexpage
+ * @package block_flexpagemod
  */
 class block_flexpagemod_lib_mod_resource extends block_flexpagemod_lib_mod {
     /**
