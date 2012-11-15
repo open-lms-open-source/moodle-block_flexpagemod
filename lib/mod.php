@@ -214,9 +214,9 @@ class block_flexpagemod_lib_mod {
         ob_end_clean();
 
         if (!empty($output)) {
-            $output = html_writer::tag('ul', $output, array('class' => 'section img-text'));
-            $output = html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default'));
-            $this->append_content($output);
+            $this->append_content(
+                html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default'))
+            );
         }
     }
 }
