@@ -40,7 +40,8 @@
     margin-left: 0;
 }
 
-/* The default mod display, no move edit widgets */
+/* The default mod display, no move or edit title widgets */
+.block_flexpagemod_commands .editing_title,
 .block_flexpagemod_commands .editing_moveleft,
 .block_flexpagemod_commands .editing_moveright,
 .block_flexpagemod_commands .editing_move,
