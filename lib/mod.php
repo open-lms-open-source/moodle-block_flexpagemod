@@ -78,7 +78,7 @@ class block_flexpagemod_lib_mod {
 
                 // Try to help out
                 if (!class_exists($class)) {
-                    throw new coding_exception("Expected to find $class in '$path' - please rename the declared class");
+                    throw new coding_exception("Failed to find $class");
                 }
             }
             if (class_exists($class)) {
@@ -86,7 +86,7 @@ class block_flexpagemod_lib_mod {
 
                 // Try to help out
                 if (!$instance instanceof block_flexpagemod_lib_mod) {
-                    throw new coding_exception("The class $class in file '$path' must extend block_flexpagemod_lib_mod");
+                    throw new coding_exception("The class $class must extend block_flexpagemod_lib_mod");
                 }
                 return $instance;
             }
