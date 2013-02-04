@@ -28,7 +28,7 @@ M.format_flexpage = M.format_flexpage || {};
 M.format_flexpage.mod_folder_init_tree = function(Y, expand_all) {
     Y.use('yui2-treeview', function(Y) {
         Y.all('.block_flexpagemod_folder div.block_flexpagemod_folder_tree').each(function(node) {
-            var tree = new YAHOO.widget.TreeView(node.get('id'));
+            var tree = new Y.YUI2.widget.TreeView(node.get('id'));
             tree.subscribe("clickEvent", function(node, event) {
                 // we want normal clicking which redirects to url
                 return false;
