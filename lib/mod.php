@@ -214,9 +214,33 @@ class block_flexpagemod_lib_mod {
         ob_end_clean();
 
         if (!empty($output)) {
+            $output = $this->inject_attribute('ul', 'role', 'presentation', $output);
+            $output = $this->inject_attribute('li', 'role', 'presentation', $output);
+
             $this->append_content(
                 html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default'))
             );
         }
+    }
+
+    /**
+     * Searches for the first occurrence of a tag and injects
+     * an HTML attribute tag.
+     *
+     * @param string $tag The tag to search for
+     * @param string $name The attribute name
+     * @param string $value The attribute value
+     * @param string $haystack The haystack to operate on
+     * @return mixed
+     */
+    public function inject_attribute($tag, $name, $value, $haystack) {
+        $open = '<'.$tag;
+        $newopen = "<$tag $name=\"$value\" ";
+
+        $start = stripos($haystack, $open);
+        if ($start === false) {
+            return $haystack;
+        }
+        return substr_replace($haystack, $newopen, $start, strlen($open));
     }
 }
