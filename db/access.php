@@ -22,15 +22,25 @@
  */
 
 /**
- * Plugin version
+ * Capabilities
  *
  * @author Mark Nielsen
  * @package block_flexpagemod
  */
 
-$plugin->version      = 2013030500;
-$plugin->requires     = 2011120503;
-$plugin->component    = 'block_flexpagemod';
-$plugin->release      = '2.2.0 (Build: 20120629)';
-$plugin->maturity     = MATURITY_STABLE;
-$plugin->dependencies = array('format_flexpage' => 2011062802);
+$capabilities = array(
+
+    'block/flexpagemod:addinstance'    => array(
+        'riskbitmask'          => RISK_SPAM | RISK_XSS,
+
+        'captype'              => 'write',
+        'contextlevel'         => CONTEXT_BLOCK,
+        'archetypes'           => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager'        => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
+
+);

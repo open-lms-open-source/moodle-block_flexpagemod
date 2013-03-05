@@ -32,3 +32,4 @@ $string['cmdisplayerror'] = 'Failed to display the associated activity, please c
 $string['displayactivity'] = 'Display activity';
 $string['displayactivity_help'] = 'The activity chosen here will be displayed in the block.';
 $string['pluginname'] = 'Flexpage Activity';
+$string['flexpagemod:addinstance'] = 'Add a new Flexpage Activity block';
