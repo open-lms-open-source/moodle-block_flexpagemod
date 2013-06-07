@@ -364,13 +364,15 @@ class block_flexpagemod_lib_seciton {
                                 'type'  => 'hidden', 'name' => 'completionstate',
                                 'value' => $newstate));
                             echo html_writer::empty_tag('input', array(
-                                'type' => 'image', 'src' => $imgsrc, 'alt' => $imgalt, 'title' => $imgtitle));
+                                'type' => 'image', 'src' => $imgsrc, 'alt' => $imgalt, 'title' => $imgtitle,
+                                'aria-live' => 'polite'));
                             echo html_writer::end_tag('div');
                             echo html_writer::end_tag('form');
                         } else {
-                            // In auto mode, or when editing, the icon is just an image
-                            echo "<span class='autocompletion'>";
-                            echo "<img src='$imgsrc' alt='$imgalt' title='$imgalt' /></span>";
+                            // In auto mode, or when editing, the icon is just an image.
+                            echo html_writer::tag('span', html_writer::empty_tag('img', array(
+                                    'src' => $imgsrc, 'alt' => $imgalt, 'title' => $imgalt)),
+                                    array('class' => 'autocompletion'));
                         }
                     }
                 }
