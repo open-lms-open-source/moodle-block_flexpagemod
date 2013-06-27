@@ -34,11 +34,11 @@ class block_flexpagemod_lib_mod_resource extends block_flexpagemod_lib_mod {
      * @return void
      */
     public function module_block_setup() {
-        global $CFG, $COURSE, $DB, $PAGE;
+        global $CFG, $COURSE, $DB;
 
         $cm       = $this->get_cm();
         $resource = $DB->get_record('resource', array('id' => $cm->instance));
-        $context  = get_context_instance(CONTEXT_MODULE, $cm->id);
+        $context  = context_module::instance($cm->id);
         if ($resource and has_capability('mod/resource:view', $context) and !$resource->tobemigrated) {
             $files = get_file_storage()->get_area_files($context->id, 'mod_resource', 'content', 0, 'sortorder DESC, id ASC', false);
             if (count($files) >= 1) {
@@ -54,45 +54,15 @@ class block_flexpagemod_lib_mod_resource extends block_flexpagemod_lib_mod {
                 $file = reset($files);
                 unset($files);
 
-                // This is copied from resource_display_embed() function
-                $clicktoopen = resource_get_clicktoopen($file, $resource->revision);
-
-                $context   = get_context_instance(CONTEXT_MODULE, $cm->id);
-                $path      = '/'.$context->id.'/mod_resource/content/'.$resource->revision.$file->get_filepath().$file->get_filename();
-                $fullurl   = file_encode_url($CFG->wwwroot.'/pluginfile.php', $path, false);
-                $moodleurl = new moodle_url('/pluginfile.php'.$path);
-
-                $mimetype = $file->get_mimetype();
-                $title    = $resource->name;
-
-                $extension = resourcelib_get_extension($file->get_filename());
-
-                $mediarenderer = $PAGE->get_renderer('core', 'media');
-                $embedoptions  = array(
-                    core_media::OPTION_TRUSTED => true,
-                    core_media::OPTION_BLOCK   => true,
-                );
-
-                if (file_mimetype_in_typegroup($mimetype, 'web_image')) { // It's an image
-                    $code = resourcelib_embed_image($fullurl, $title);
-
-                } else if ($mimetype === 'application/pdf') {
-                    // PDF document
-                    $code = resourcelib_embed_pdf($fullurl, $title, $clicktoopen);
-
-                } else if ($mediarenderer->can_embed_url($moodleurl, $embedoptions)) {
-                    // Media (audio/video) file.
-                    $code = $mediarenderer->embed_url($moodleurl, $title, 0, 0, $embedoptions);
-
-                } else {
-                    // anything else - just try object tag enlarged as much as possible
-                    $code = resourcelib_embed_general($fullurl, $title, $clicktoopen, $mimetype);
-                }
+                $resource->mainfile = $file->get_filename();
+                $displaytype = resource_get_final_display_type($resource);
 
                 ob_start();
-                resource_print_heading($resource, $cm, $COURSE);
-                echo $code;
-                resource_print_intro($resource, $cm, $COURSE);
+                if ($displaytype == RESOURCELIB_DISPLAY_EMBED ) {
+                    resource_display_embed($resource, $cm, $COURSE, $file, false);
+                } else {
+                    resource_print_workaround($resource, $cm, $COURSE, $file, false);
+                }
                 $this->append_content(ob_get_contents());
                 ob_end_clean();
             }
