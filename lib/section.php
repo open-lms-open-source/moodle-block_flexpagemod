@@ -28,7 +28,7 @@
  * @author Mark Nielsen
  * @package block_flexpagemod
  */
-class block_flexpagemod_lib_seciton {
+class block_flexpagemod_lib_section {
     /**
      * This is a copy of print_section method.
      *

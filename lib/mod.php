@@ -210,7 +210,7 @@ class block_flexpagemod_lib_mod {
         $course     = $this->get_block()->page->course;
         $mods       = array($cm->id => $cm);
         $section    = $cm->get_modinfo()->get_section_info($cm->sectionnum);
-        $sectionlib = new block_flexpagemod_lib_seciton();
+        $sectionlib = new block_flexpagemod_lib_section();
 
         ob_start();
         $sectionlib->print_section($course, $section, $mods, array());
