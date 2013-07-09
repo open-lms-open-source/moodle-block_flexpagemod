@@ -26,7 +26,7 @@
 }
 
 /* The default mod display, this is the <ul> element */
-.block_flexpagemod_default ul.section {
+.block_flexpagemod_default.course-content ul.section {
     margin: 0;
 }
 
@@ -72,6 +72,11 @@
 .editing .block_flexpagemod_label .content .commands,
 .editing .block_flexpagemod_commands .commands {
     float: right;
+}
+
+/* Made room for the edit widgets for labels */
+.editing .block_flexpagemod_label .block_flexpagemod_default.course-content ul.section li.activity {
+    padding-bottom: 1.5em;
 }
 
 /* For page module */

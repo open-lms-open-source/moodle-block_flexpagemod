@@ -198,18 +198,22 @@ class block_flexpagemod_lib_mod {
      * @return void
      */
     public function default_block_setup() {
+
+        require_once(__DIR__.'/section.php');
+
         // Mark our flag
         $this->defaultused = true;
 
         $cm = $this->get_cm();
         $cm->modfullname = get_string('modulename', $cm->modname);
 
-        $course  = $this->get_block()->page->course;
-        $mods    = array($cm->id => $cm);
-        $section = $cm->get_modinfo()->get_section_info($cm->sectionnum);
+        $course     = $this->get_block()->page->course;
+        $mods       = array($cm->id => $cm);
+        $section    = $cm->get_modinfo()->get_section_info($cm->sectionnum);
+        $sectionlib = new block_flexpagemod_lib_section();
 
         ob_start();
-        print_section($course, $section, $mods, array());
+        $sectionlib->print_section($course, $section, $mods, array());
         $output = ob_get_contents();
         ob_end_clean();
 
@@ -218,7 +222,7 @@ class block_flexpagemod_lib_mod {
             $output = $this->inject_attribute('li', 'role', 'presentation', $output);
 
             $this->append_content(
-                html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default'))
+                html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default course-content'))
             );
         }
     }
