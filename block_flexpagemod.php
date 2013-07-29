@@ -112,7 +112,7 @@ class block_flexpagemod extends block_base {
      * @return bool
      */
     function hide_header() {
-        return true;
+        return $this->page->theme->name !== 'mymobile';
     }
 
     /**
