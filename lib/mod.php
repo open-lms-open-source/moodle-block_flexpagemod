@@ -114,6 +114,9 @@ class block_flexpagemod_lib_mod {
      * @return void
      */
     public function setup_block() {
+        // Change title, not always displayed though.
+        $this->get_block()->title = format_string($this->get_cm()->name);
+
         // Check if we are not visible to the user
         if (!$this->get_cm()->uservisible) {
             // If we have availability information, we do default display
