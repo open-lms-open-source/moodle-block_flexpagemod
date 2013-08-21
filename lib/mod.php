@@ -175,7 +175,14 @@ class block_flexpagemod_lib_mod {
             } else {
                 $mod->groupmode = false;
             }
-            $buttons = make_editing_buttons($mod, true, true, $mod->indent, $mod->sectionnum);
+            /** @var core_course_renderer $renderer */
+            $renderer   = $this->get_block()->page->get_renderer('core', 'course');
+            $editactions = course_get_cm_edit_actions($mod);
+
+            // Don't allow these actions.
+            unset($editactions['move'], $editactions['title']);
+
+            $buttons = $renderer->course_section_cm_edit_actions($editactions).$mod->get_after_edit_icons();
             $buttons = html_writer::tag('div', $buttons, array('class' => 'block_flexpagemod_commands'));
 
             $this->get_block()->content->text = html_writer::tag(
