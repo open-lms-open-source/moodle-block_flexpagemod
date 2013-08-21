@@ -201,53 +201,26 @@ class block_flexpagemod_lib_mod {
      * @return void
      */
     public function default_block_setup() {
+        global $CFG;
 
-        require_once(__DIR__.'/section.php');
+        require_once($CFG->libdir.'/completionlib.php');
 
         // Mark our flag
         $this->defaultused = true;
 
-        $cm = $this->get_cm();
-        $cm->modfullname = get_string('modulename', $cm->modname);
+        $course = $this->get_block()->page->course;
+        $completioninfo = new completion_info($course);
 
-        $course     = $this->get_block()->page->course;
-        $mods       = array($cm->id => $cm);
-        $section    = $cm->get_modinfo()->get_section_info($cm->sectionnum);
-        $sectionlib = new block_flexpagemod_lib_section();
+        /** @var core_course_renderer $renderer */
+        $renderer = $this->get_block()->page->get_renderer('core', 'course');
+        $output   = $renderer->course_section_cm($course, $completioninfo, $this->get_cm(), null);
 
-        ob_start();
-        $sectionlib->print_section($course, $section, $mods, array());
-        $output = ob_get_contents();
-        ob_end_clean();
+        // We need these for CSS rules, use role to have screen readers ignore list structure.
+        $output = html_writer::tag('li', $output, array('role' => 'presentation', 'class' => 'activity'));
+        $output = html_writer::tag('ul', $output, array('role' => 'presentation', 'class' => 'section'));
 
-        if (!empty($output)) {
-            $output = $this->inject_attribute('ul', 'role', 'presentation', $output);
-            $output = $this->inject_attribute('li', 'role', 'presentation', $output);
-
-            $this->append_content(
-                html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default course-content'))
-            );
-        }
-    }
-
-    /**
-     * Searches for the first occurrence of a tag and injects
-     * an HTML attribute tag.
-     *
-     * @param string $tag The tag to search for
-     * @param string $name The attribute name
-     * @param string $value The attribute value
-     * @param string $haystack The haystack to operate on
-     * @return mixed
-     */
-    public function inject_attribute($tag, $name, $value, $haystack) {
-        $open = '<'.$tag;
-        $newopen = "<$tag $name=\"$value\" ";
-
-        $start = stripos($haystack, $open);
-        if ($start === false) {
-            return $haystack;
-        }
-        return substr_replace($haystack, $newopen, $start, strlen($open));
+        $this->append_content(
+            html_writer::tag('div', $output, array('class' => 'block_flexpagemod_default course-content'))
+        );
     }
 }
