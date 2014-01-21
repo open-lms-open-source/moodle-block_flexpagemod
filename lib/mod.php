@@ -223,7 +223,7 @@ class block_flexpagemod_lib_mod {
         $output   = $renderer->course_section_cm($course, $completioninfo, $this->get_cm(), null);
 
         // We need these for CSS rules, use role to have screen readers ignore list structure.
-        $output = html_writer::tag('li', $output, array('role' => 'presentation', 'class' => 'activity'));
+        $output = html_writer::tag('li', $output, array('role' => 'presentation', 'class' => 'activity', 'id' => 'module-'.$this->get_cm()->id));
         $output = html_writer::tag('ul', $output, array('role' => 'presentation', 'class' => 'section'));
 
         $this->append_content(
