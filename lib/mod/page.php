@@ -38,7 +38,7 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
 
         $cm      = $this->get_cm();
         $page    = $DB->get_record('page', array('id' => $cm->instance));
-        $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+        $context = context_module::instance($cm->id);
         if ($page and has_capability('mod/page:view', $context)) {
             add_to_log($cm->course, 'page', 'view', 'view.php?id='.$cm->id, $page->id, $cm->id);
 
