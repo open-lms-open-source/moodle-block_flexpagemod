@@ -38,7 +38,7 @@ class block_flexpagemod_lib_mod_url extends block_flexpagemod_lib_mod {
 
         $cm      = $this->get_cm();
         $url     = $DB->get_record('url', array('id' => $cm->instance));
-        $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+        $context = context_module::instance($cm->id);
         $course  = $COURSE;
         if ($url and has_capability('mod/url:view', $context)) {
             require_once($CFG->dirroot.'/mod/url/locallib.php');
