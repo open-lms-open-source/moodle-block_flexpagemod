@@ -41,8 +41,8 @@
 }
 
 /* The default mod display, no move or edit title widgets */
-.block_flexpagemod_default .editing_moveleft,
-.block_flexpagemod_default .editing_moveright,
+.block_flexpagemod_default .section .activity .moodle-actionmenu[data-enhanced] .menu > li > a.editing_moveleft,
+.block_flexpagemod_default .section .activity .moodle-actionmenu[data-enhanced] .menu > li > a.editing_moveright,
 .block_flexpagemod_default .editing_move {
     display: none;
 }
