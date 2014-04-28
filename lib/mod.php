@@ -164,17 +164,7 @@ class block_flexpagemod_lib_mod {
 
         if (!$this->defaultused and $PAGE->user_is_editing()) {
             $mod = $this->get_cm();
-            $course = $this->get_block()->page->course;
-            $groupbuttons = ($course->groupmode or (!$course->groupmodeforce));
-            $groupbuttonslink = (!$course->groupmodeforce);
 
-            if ($groupbuttons and plugin_supports('mod', $mod->modname, FEATURE_GROUPS, 0)) {
-                if (!$mod->groupmodelink = $groupbuttonslink) {
-                    $mod->groupmode = $course->groupmode;
-                }
-            } else {
-                $mod->groupmode = false;
-            }
             /** @var core_course_renderer $renderer */
             $renderer   = $this->get_block()->page->get_renderer('core', 'course');
             $editactions = course_get_cm_edit_actions($mod);
@@ -182,7 +172,7 @@ class block_flexpagemod_lib_mod {
             // Don't allow these actions.
             unset($editactions['move'], $editactions['title']);
 
-            $buttons = $renderer->course_section_cm_edit_actions($editactions, $mod).$mod->get_after_edit_icons();
+            $buttons = $renderer->course_section_cm_edit_actions($editactions, $mod).$mod->afterediticons;
             $buttons = html_writer::tag('div', $buttons, array('class' => 'block_flexpagemod_commands'));
 
             $this->get_block()->content->text = html_writer::tag(
