@@ -74,8 +74,15 @@ class block_flexpagemod_lib_mod_url extends block_flexpagemod_lib_mod {
                 $code = $mediarenderer->embed_url($moodleurl, $title, 0, 0, $embedoptions);
 
             } else {
-                // anything else - just try object tag enlarged as much as possible
-                $code = resourcelib_embed_general($fullurl, $title, $clicktoopen, $mimetype);
+                // This doesn't work in flexpage.
+                // $code = resourcelib_embed_general($fullurl, $title, $clicktoopen, $mimetype);
+
+                $code = html_writer::tag('iframe', $clicktoopen, array(
+                    'id' => html_writer::random_id('modurl'),
+                    'src' => $fullurl,
+                    'class' => 'block_flexpagemod_iframe',
+                ));
+                $code = html_writer::div($code, 'resourcecontent resourcegeneral');
             }
 
             ob_start();

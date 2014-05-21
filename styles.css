@@ -80,3 +80,9 @@
     font-size: 0.6em;
 }
 
+/* For embedded content in iframes */
+.block_flexpagemod_iframe {
+    width: 100%;
+    height: 400px;
+}
+
