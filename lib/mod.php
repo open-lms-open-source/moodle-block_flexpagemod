@@ -126,6 +126,7 @@ class block_flexpagemod_lib_mod {
         } else {
             // Allow module custom display
             $this->module_block_setup();
+            $this->dim_content();
             $this->add_mod_commands();
         }
     }
@@ -190,6 +191,15 @@ class block_flexpagemod_lib_mod {
      */
     public function module_block_setup() {
         $this->default_block_setup();
+    }
+
+    /**
+     * Dim the content of the block
+     */
+    public function dim_content() {
+        if (!$this->defaultused && !$this->get_cm()->visible) {
+            $this->get_block()->content->text = html_writer::div($this->get_block()->content->text, 'dimmed_mod_content');
+        }
     }
 
     /**
