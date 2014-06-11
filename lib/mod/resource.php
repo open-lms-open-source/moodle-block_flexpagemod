@@ -99,7 +99,19 @@ class block_flexpagemod_lib_mod_resource extends block_flexpagemod_lib_mod {
 
         } else if ($mimetype === 'application/pdf') {
             // PDF document
-            $code = resourcelib_embed_pdf($fullurl, $title, $clicktoopen);
+            // This doesn't work in flexpage.
+            // $code = resourcelib_embed_pdf($fullurl, $title, $clicktoopen);
+
+            $code = <<<EOT
+<div class="resourcecontent resourcepdf">
+  <object id="resourceobject" class="block_flexpagemod_object" data="$fullurl" type="application/pdf">
+    <param name="wmode" value="opaque" />
+    <param name="src" value="$fullurl" />
+    $clicktoopen
+  </object>
+</div>
+EOT;
+
 
         } else if ($mediarenderer->can_embed_url($moodleurl, $embedoptions)) {
             // Media (audio/video) file.
