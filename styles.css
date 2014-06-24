@@ -40,6 +40,15 @@
     margin-left: 0;
 }
 
+/* Remove default padding to the right */
+.editing #region-post .block_flexpagemod_default.course-content .section .activity .activityinstance,
+.editing #region-pre .block_flexpagemod_default.course-content .section .activity .activityinstance {
+    padding-right: 0;
+    display: block;
+    margin-top: 45px;
+    height: 100%;
+}
+
 /* The default mod display, no move or edit title widgets */
 .block_flexpagemod_default .section .activity .moodle-actionmenu[data-enhanced] .menu > li > a.editing_moveleft,
 .block_flexpagemod_default .section .activity .moodle-actionmenu[data-enhanced] .menu > li > a.editing_moveright,
