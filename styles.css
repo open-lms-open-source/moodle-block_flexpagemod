@@ -48,7 +48,7 @@
 }
 
 /* Have module edit widgets dimmed and hidden content */
-.block_flexpagemod .dimmed_mod_content,
+.block_flexpagemod .dimmed_text,
 .editing .block_flexpagemod_default li.activity .commands,
 .editing .block_flexpagemod_commands .commands {
     opacity: 0.25;

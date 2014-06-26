@@ -198,7 +198,7 @@ class block_flexpagemod_lib_mod {
      */
     public function dim_content() {
         if (!$this->defaultused && !$this->get_cm()->visible) {
-            $this->get_block()->content->text = html_writer::div($this->get_block()->content->text, 'dimmed_mod_content');
+            $this->get_block()->content->text = html_writer::div($this->get_block()->content->text, 'dimmed_text');
         }
     }
 
