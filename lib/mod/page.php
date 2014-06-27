@@ -50,7 +50,7 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
             $options = empty($page->displayoptions) ? array() : unserialize($page->displayoptions);
 
             if (!empty($options['printheading'])) {
-                $this->append_content($OUTPUT->heading(format_string($page->name), 2, 'main', 'pageheading'));
+                $this->append_content($OUTPUT->heading(format_string($page->name), 2, null, 'pageheading'));
             }
             if (!empty($options['printintro'])) {
                 if (trim(strip_tags($page->intro))) {
