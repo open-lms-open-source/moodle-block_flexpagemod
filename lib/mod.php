@@ -173,7 +173,7 @@ class block_flexpagemod_lib_mod {
             // Don't allow these actions.
             unset($editactions['move'], $editactions['title']);
 
-            $buttons = $renderer->course_section_cm_edit_actions($editactions, $mod).$mod->afterediticons;
+            $buttons = $renderer->course_section_cm_edit_actions($editactions, $mod, array('constraintselector' => '.block_flexpagemod')).$mod->afterediticons;
             $buttons = html_writer::tag('div', $buttons, array('class' => 'block_flexpagemod_commands'));
 
             $this->get_block()->content->text = html_writer::tag(
