@@ -59,7 +59,7 @@ class block_flexpagemod_lib_mod_resource extends block_flexpagemod_lib_mod {
 
                 ob_start();
                 if ($displaytype == RESOURCELIB_DISPLAY_EMBED ) {
-                    resource_display_embed($resource, $cm, $COURSE, $file, false);
+                    $this->resource_display_embed($resource, $cm, $COURSE, $file);
                 } else {
                     resource_print_workaround($resource, $cm, $COURSE, $file, false);
                 }
@@ -67,5 +67,78 @@ class block_flexpagemod_lib_mod_resource extends block_flexpagemod_lib_mod {
                 ob_end_clean();
             }
         }
+    }
+
+    /**
+     * Copied from resource_display_embed and then modified
+     * for Flexpage display.  See comments for edited parts.
+     */
+    protected function resource_display_embed($resource, $cm, $course, $file) {
+        global $CFG, $PAGE, $OUTPUT;
+
+        $clicktoopen = resource_get_clicktoopen($file, $resource->revision);
+
+        $context   = context_module::instance($cm->id);
+        $path      = '/'.$context->id.'/mod_resource/content/'.$resource->revision.$file->get_filepath().$file->get_filename();
+        $fullurl   = file_encode_url($CFG->wwwroot.'/pluginfile.php', $path, false);
+        $moodleurl = new moodle_url('/pluginfile.php'.$path);
+
+        $mimetype = $file->get_mimetype();
+        $title    = $resource->name;
+
+        $extension = resourcelib_get_extension($file->get_filename());
+
+        $mediarenderer = $PAGE->get_renderer('core', 'media');
+        $embedoptions  = array(
+            core_media::OPTION_TRUSTED => true,
+            core_media::OPTION_BLOCK   => true,
+        );
+
+        if (file_mimetype_in_typegroup($mimetype, 'web_image')) { // It's an image
+            $code = resourcelib_embed_image($fullurl, $title);
+
+        } else if ($mimetype === 'application/pdf') {
+            // PDF document
+            // This doesn't work in flexpage.
+            // $code = resourcelib_embed_pdf($fullurl, $title, $clicktoopen);
+
+            $code = <<<EOT
+<div class="resourcecontent resourcepdf">
+  <object id="resourceobject" class="block_flexpagemod_object" data="$fullurl" type="application/pdf">
+    <param name="wmode" value="opaque" />
+    <param name="src" value="$fullurl" />
+    $clicktoopen
+  </object>
+</div>
+EOT;
+
+
+        } else if ($mediarenderer->can_embed_url($moodleurl, $embedoptions)) {
+            // Media (audio/video) file.
+            $code = $mediarenderer->embed_url($moodleurl, $title, 0, 0, $embedoptions);
+
+        } else {
+            // This doesn't work in flexpage.
+            // $code = resourcelib_embed_general($fullurl, $title, $clicktoopen, $mimetype);
+
+            $code = html_writer::tag('iframe', $clicktoopen, array(
+                'id'    => html_writer::random_id('modurl'),
+                'src'   => $fullurl,
+                'class' => 'block_flexpagemod_iframe',
+            ));
+            $code = html_writer::div($code, 'resourcecontent resourcegeneral');
+        }
+
+        // Not for Flexpage.
+        // resource_print_header($resource, $cm, $course);
+        resource_print_heading($resource, $cm, $course);
+
+        echo $code;
+
+        resource_print_intro($resource, $cm, $course);
+
+        // Not for Flexpage.
+        // echo $OUTPUT->footer();
+        // die;
     }
 }

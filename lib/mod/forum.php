@@ -33,7 +33,7 @@ class block_flexpagemod_lib_mod_forum extends block_flexpagemod_lib_mod {
 
         $cm      = $this->get_cm();
         $forum   = $DB->get_record('forum', array('id' => $cm->instance));
-        $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+        $context = context_module::instance($cm->id);
 
         if ($forum and has_capability('mod/forum:viewdiscussion', $context)) {
             if (trim($forum->intro) != '') {

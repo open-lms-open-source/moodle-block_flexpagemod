@@ -126,6 +126,7 @@ class block_flexpagemod_lib_mod {
         } else {
             // Allow module custom display
             $this->module_block_setup();
+            $this->dim_content();
             $this->add_mod_commands();
         }
     }
@@ -164,17 +165,7 @@ class block_flexpagemod_lib_mod {
 
         if (!$this->defaultused and $PAGE->user_is_editing()) {
             $mod = $this->get_cm();
-            $course = $this->get_block()->page->course;
-            $groupbuttons = ($course->groupmode or (!$course->groupmodeforce));
-            $groupbuttonslink = (!$course->groupmodeforce);
 
-            if ($groupbuttons and plugin_supports('mod', $mod->modname, FEATURE_GROUPS, 0)) {
-                if (!$mod->groupmodelink = $groupbuttonslink) {
-                    $mod->groupmode = $course->groupmode;
-                }
-            } else {
-                $mod->groupmode = false;
-            }
             /** @var core_course_renderer $renderer */
             $renderer   = $this->get_block()->page->get_renderer('core', 'course');
             $editactions = course_get_cm_edit_actions($mod);
@@ -182,7 +173,7 @@ class block_flexpagemod_lib_mod {
             // Don't allow these actions.
             unset($editactions['move'], $editactions['title']);
 
-            $buttons = $renderer->course_section_cm_edit_actions($editactions).$mod->get_after_edit_icons();
+            $buttons = $renderer->course_section_cm_edit_actions($editactions, $mod, array('constraintselector' => '.block_flexpagemod')).$mod->afterediticons;
             $buttons = html_writer::tag('div', $buttons, array('class' => 'block_flexpagemod_commands'));
 
             $this->get_block()->content->text = html_writer::tag(
@@ -200,6 +191,15 @@ class block_flexpagemod_lib_mod {
      */
     public function module_block_setup() {
         $this->default_block_setup();
+    }
+
+    /**
+     * Dim the content of the block
+     */
+    public function dim_content() {
+        if (!$this->defaultused && !$this->get_cm()->visible) {
+            $this->get_block()->content->text = html_writer::div($this->get_block()->content->text, 'dimmed_text');
+        }
     }
 
     /**
@@ -223,7 +223,7 @@ class block_flexpagemod_lib_mod {
         $output   = $renderer->course_section_cm($course, $completioninfo, $this->get_cm(), null);
 
         // We need these for CSS rules, use role to have screen readers ignore list structure.
-        $output = html_writer::tag('li', $output, array('role' => 'presentation', 'class' => 'activity'));
+        $output = html_writer::tag('li', $output, array('role' => 'presentation', 'class' => 'activity', 'id' => 'module-'.$this->get_cm()->id));
         $output = html_writer::tag('ul', $output, array('role' => 'presentation', 'class' => 'section'));
 
         $this->append_content(

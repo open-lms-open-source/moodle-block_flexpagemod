@@ -38,7 +38,7 @@ class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
 
         $cm      = $this->get_cm();
         $folder  = $DB->get_record('folder', array('id' => $cm->instance));
-        $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+        $context = context_module::instance($cm->id);
         $course  = $COURSE;
         if ($folder and has_capability('mod/folder:view', $context)) {
             add_to_log($course->id, 'folder', 'view', 'view.php?id='.$cm->id, $folder->id, $cm->id);
@@ -48,8 +48,8 @@ class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
             $completion = new completion_info($course);
             $completion->set_module_viewed($cm);
 
-            /** @var $output block_flexpagemod_renderer */
-            $output = $PAGE->get_renderer('block_flexpagemod');
+            /** @var $output mod_folder_renderer */
+            $output = $PAGE->get_renderer('mod_folder');
 
             ob_start();
             echo $OUTPUT->heading(format_string($folder->name), 2);
@@ -61,12 +61,12 @@ class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
             }
 
             echo $OUTPUT->box_start('generalbox foldertree');
-            $output->folder_tree($folder, $cm, $course);
+            echo $output->render(new folder_tree($folder, $cm));
             echo $OUTPUT->box_end();
 
             if (has_capability('mod/folder:managefiles', $context)) {
                 echo $OUTPUT->container_start('mdl-align');
-                echo $OUTPUT->single_button(new moodle_url('/mod/folder/edit.php', array('id'=>$cm->id)), get_string('edit'));
+                echo $OUTPUT->single_button(new moodle_url('/mod/folder/edit.php', array('id' => $cm->id)), get_string('edit'), 'mdl-align folder-edit-button');
                 echo $OUTPUT->container_end();
             }
             $this->append_content(ob_get_contents());
