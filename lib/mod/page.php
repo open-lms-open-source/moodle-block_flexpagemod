@@ -49,9 +49,8 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
 
             $options = empty($page->displayoptions) ? array() : unserialize($page->displayoptions);
 
-            if (!empty($options['printheading'])) {
-                $this->append_content($OUTPUT->heading(format_string($page->name), 2, 'main', 'pageheading'));
-            }
+            $this->append_content($OUTPUT->heading(format_string($page->name), 2));
+
             if (!empty($options['printintro'])) {
                 if (trim(strip_tags($page->intro))) {
                     $this->append_content($OUTPUT->box(
@@ -61,10 +60,10 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
                 }
             }
             $content       = file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $context->id, 'mod_page', 'content', $page->revision);
-            $formatoptions = array('noclean'=>true, 'overflowdiv'=>true);
+            $formatoptions = array('noclean' => true, 'overflowdiv' => true, 'context' => $context);
 
-            $this->append_content(format_text($content, $page->contentformat, $formatoptions, $COURSE->id))
-                 ->append_content(html_writer::tag('div', get_string("lastmodified").': '.userdate($page->timemodified), array('class' => 'modified')));
+            $this->append_content(format_text($content, $page->contentformat, $formatoptions))
+                 ->append_content(html_writer::div(get_string("lastmodified").': '.userdate($page->timemodified), 'modified'));
         }
     }
 }
