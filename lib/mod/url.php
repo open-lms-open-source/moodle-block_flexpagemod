@@ -44,7 +44,15 @@ class block_flexpagemod_lib_mod_url extends block_flexpagemod_lib_mod {
             require_once($CFG->dirroot.'/mod/url/locallib.php');
             require_once($CFG->libdir . '/completionlib.php');
 
-            add_to_log($course->id, 'url', 'view', 'view.php?id='.$cm->id, $url->id, $cm->id);
+            $params = array(
+                'context'  => $context,
+                'objectid' => $url->id
+            );
+            $event  = \mod_url\event\course_module_viewed::create($params);
+            $event->add_record_snapshot('course_modules', $cm);
+            $event->add_record_snapshot('course', $course);
+            $event->add_record_snapshot('url', $url);
+            $event->trigger();
 
             // Update 'viewed' state if required by completion system
             $completion = new completion_info($course);

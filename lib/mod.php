@@ -120,7 +120,7 @@ class block_flexpagemod_lib_mod {
         // Check if we are not visible to the user
         if (!$this->get_cm()->uservisible) {
             // If we have availability information, we do default display
-            if ($this->get_cm()->showavailability and !empty($this->get_cm()->availableinfo)) {
+            if (!empty($this->get_cm()->availableinfo)) {
                 $this->default_block_setup();
             }
         } else {

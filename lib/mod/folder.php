@@ -41,7 +41,15 @@ class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
         $context = context_module::instance($cm->id);
         $course  = $COURSE;
         if ($folder and has_capability('mod/folder:view', $context)) {
-            add_to_log($course->id, 'folder', 'view', 'view.php?id='.$cm->id, $folder->id, $cm->id);
+            $params = array(
+                'context'  => $context,
+                'objectid' => $folder->id
+            );
+            $event  = \mod_folder\event\course_module_viewed::create($params);
+            $event->add_record_snapshot('course_modules', $cm);
+            $event->add_record_snapshot('course', $course);
+            $event->add_record_snapshot('folder', $folder);
+            $event->trigger();
 
             // Update 'viewed' state if required by completion system
             require_once($CFG->libdir . '/completionlib.php');
@@ -54,10 +62,9 @@ class block_flexpagemod_lib_mod_folder extends block_flexpagemod_lib_mod {
             ob_start();
             echo $OUTPUT->heading(format_string($folder->name), 2);
 
-            if (trim(strip_tags($folder->intro))) {
-                echo $OUTPUT->box_start('mod_introbox', 'pageintro');
-                echo format_module_intro('folder', $folder, $cm->id);
-                echo $OUTPUT->box_end();
+            if (trim($folder->intro)) {
+                echo $OUTPUT->box(format_module_intro('folder', $folder, $cm->id),
+                    'generalbox', 'intro');
             }
 
             echo $OUTPUT->box_start('generalbox foldertree');

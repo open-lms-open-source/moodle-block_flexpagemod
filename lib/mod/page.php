@@ -40,7 +40,15 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
         $page    = $DB->get_record('page', array('id' => $cm->instance));
         $context = context_module::instance($cm->id);
         if ($page and has_capability('mod/page:view', $context)) {
-            add_to_log($cm->course, 'page', 'view', 'view.php?id='.$cm->id, $page->id, $cm->id);
+            // Trigger module viewed event.
+            $event = \mod_page\event\course_module_viewed::create(array(
+                'objectid' => $page->id,
+                'context'  => $context
+            ));
+            $event->add_record_snapshot('course_modules', $cm);
+            $event->add_record_snapshot('course', $COURSE);
+            $event->add_record_snapshot('page', $page);
+            $event->trigger();
 
             // Update 'viewed' state if required by completion system
             require_once($CFG->libdir . '/completionlib.php');
@@ -49,7 +57,9 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
 
             $options = empty($page->displayoptions) ? array() : unserialize($page->displayoptions);
 
-            $this->append_content($OUTPUT->heading(format_string($page->name), 2));
+            if (!isset($options['printheading']) || !empty($options['printheading'])) {
+                $this->append_content($OUTPUT->heading(format_string($page->name), 2));
+            }
 
             if (!empty($options['printintro'])) {
                 if (trim(strip_tags($page->intro))) {
