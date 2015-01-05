@@ -40,7 +40,15 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
         $page    = $DB->get_record('page', array('id' => $cm->instance));
         $context = context_module::instance($cm->id);
         if ($page and has_capability('mod/page:view', $context)) {
-            add_to_log($cm->course, 'page', 'view', 'view.php?id='.$cm->id, $page->id, $cm->id);
+            // Trigger module viewed event.
+            $event = \mod_page\event\course_module_viewed::create(array(
+                'objectid' => $page->id,
+                'context'  => $context
+            ));
+            $event->add_record_snapshot('course_modules', $cm);
+            $event->add_record_snapshot('course', $COURSE);
+            $event->add_record_snapshot('page', $page);
+            $event->trigger();
 
             // Update 'viewed' state if required by completion system
             require_once($CFG->libdir . '/completionlib.php');
@@ -49,9 +57,10 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
 
             $options = empty($page->displayoptions) ? array() : unserialize($page->displayoptions);
 
-            if (!empty($options['printheading'])) {
-                $this->append_content($OUTPUT->heading(format_string($page->name), 2, 'main', 'pageheading'));
+            if (!isset($options['printheading']) || !empty($options['printheading'])) {
+                $this->append_content($OUTPUT->heading(format_string($page->name), 2));
             }
+
             if (!empty($options['printintro'])) {
                 if (trim(strip_tags($page->intro))) {
                     $this->append_content($OUTPUT->box(
@@ -61,10 +70,10 @@ class block_flexpagemod_lib_mod_page extends block_flexpagemod_lib_mod {
                 }
             }
             $content       = file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $context->id, 'mod_page', 'content', $page->revision);
-            $formatoptions = array('noclean'=>true, 'overflowdiv'=>true);
+            $formatoptions = array('noclean' => true, 'overflowdiv' => true, 'context' => $context);
 
-            $this->append_content(format_text($content, $page->contentformat, $formatoptions, $COURSE->id))
-                 ->append_content(html_writer::tag('div', get_string("lastmodified").': '.userdate($page->timemodified), array('class' => 'modified')));
+            $this->append_content(format_text($content, $page->contentformat, $formatoptions))
+                 ->append_content(html_writer::div(get_string("lastmodified").': '.userdate($page->timemodified), 'modified'));
         }
     }
 }
