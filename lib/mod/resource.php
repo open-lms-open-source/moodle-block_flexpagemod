@@ -69,7 +69,7 @@ class block_flexpagemod_lib_mod_resource extends block_flexpagemod_lib_mod {
                 if ($displaytype == RESOURCELIB_DISPLAY_EMBED ) {
                     $this->resource_display_embed($resource, $cm, $COURSE, $file);
                 } else {
-                    $this->resource_print_workaround($resource, $cm, $COURSE, $file, false);
+                    $this->resource_print_workaround($resource, $cm, $COURSE, $file);
                 }
                 $this->append_content(ob_get_contents());
                 ob_end_clean();
