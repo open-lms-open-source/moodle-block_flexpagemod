@@ -69,7 +69,7 @@ class block_flexpagemod_lib_mod_resource extends block_flexpagemod_lib_mod {
                 if ($displaytype == RESOURCELIB_DISPLAY_EMBED ) {
                     $this->resource_display_embed($resource, $cm, $COURSE, $file);
                 } else {
-                    resource_print_workaround($resource, $cm, $COURSE, $file, false);
+                    $this->resource_print_workaround($resource, $cm, $COURSE, $file);
                 }
                 $this->append_content(ob_get_contents());
                 ob_end_clean();
@@ -148,5 +148,60 @@ EOT;
         // Not for Flexpage.
         // echo $OUTPUT->footer();
         // die;
+    }
+
+    /**
+     * Print resource info and workaround link when JS not available.
+     *
+     * Copied from mod/resource/locallib.php with small portions changed.
+     * See comments for removed sections.
+     *
+     * @param object $resource
+     * @param object $cm
+     * @param object $course
+     * @param stored_file $file main file
+     * @return does not return
+     */
+    protected function resource_print_workaround($resource, $cm, $course, $file) {
+        global $CFG, $OUTPUT;
+
+        // Don't output header when using flexpage
+        // resource_print_header($resource, $cm, $course);
+        resource_print_heading($resource, $cm, $course, true);
+        resource_print_intro($resource, $cm, $course, true);
+
+        $resource->mainfile = $file->get_filename();
+        echo '<div class="resourceworkaround">';
+        switch (resource_get_final_display_type($resource)) {
+            case RESOURCELIB_DISPLAY_POPUP:
+                $path = '/'.$file->get_contextid().'/mod_resource/content/'.$resource->revision.$file->get_filepath().$file->get_filename();
+                $fullurl = file_encode_url($CFG->wwwroot.'/pluginfile.php', $path, false);
+                $options = empty($resource->displayoptions) ? array() : unserialize($resource->displayoptions);
+                $width  = empty($options['popupwidth'])  ? 620 : $options['popupwidth'];
+                $height = empty($options['popupheight']) ? 450 : $options['popupheight'];
+                $wh = "width=$width,height=$height,toolbar=no,location=no,menubar=no,copyhistory=no,status=no,directories=no,scrollbars=yes,resizable=yes";
+                $extra = "onclick=\"window.open('$fullurl', '', '$wh'); return false;\"";
+                echo resource_get_clicktoopen($file, $resource->revision, $extra);
+                break;
+
+            case RESOURCELIB_DISPLAY_NEW:
+                $extra = 'onclick="this.target=\'_blank\'"';
+                echo resource_get_clicktoopen($file, $resource->revision, $extra);
+                break;
+
+            case RESOURCELIB_DISPLAY_DOWNLOAD:
+                echo resource_get_clicktodownload($file, $resource->revision);
+                break;
+
+            case RESOURCELIB_DISPLAY_OPEN:
+            default:
+                echo resource_get_clicktoopen($file, $resource->revision);
+                break;
+        }
+        echo '</div>';
+
+        // No need to print footer as header wasn't printed
+        //echo $OUTPUT->footer();
+        //die;
     }
 }
