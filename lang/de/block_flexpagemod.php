@@ -21,8 +21,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['cmdisplayerror'] = 'Error en mostrar l\'activitat associada. Comproveu les configuracions del bloc. Missatge d\'error: "{$a}"';
-$string['displayactivity'] = 'Activitat de visualització';
-$string['displayactivity_help'] = 'L\'activitat que trieu aquí es mostrarà al bloc.';
-$string['pluginname'] = 'Activitat de flexpage';
-$string['flexpagemod:addinstance'] = 'Afegeix un nou bloc d\'activitats de flexpage';
+$string['cmdisplayerror'] = 'Die zugehörige Aktivität konnte nicht angezeigt werden, bestätigen Sie die Konfigurationen des Blocks. Fehlermeldung: "{$a}"';
+$string['displayactivity'] = 'Aktivität anzeigen';
+$string['displayactivity_help'] = 'Die hier ausgewählte Aktivität wird im Block angezeigt.';
+$string['pluginname'] = 'Flexpage-Aktivität';
+$string['flexpagemod:addinstance'] = 'Neuen Block "Flexpage-Aktivität" hinzufügen';
