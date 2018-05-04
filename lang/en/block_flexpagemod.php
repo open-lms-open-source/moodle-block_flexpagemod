@@ -33,3 +33,4 @@ $string['displayactivity'] = 'Display activity';
 $string['displayactivity_help'] = 'The activity chosen here will be displayed in the block.';
 $string['pluginname'] = 'Flexpage Activity';
 $string['flexpagemod:addinstance'] = 'Add a new Flexpage Activity block';
+$string['privacy:metadata'] = 'The Flexpage Activity plugin does not store any personal data.';
