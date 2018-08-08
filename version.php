@@ -28,9 +28,9 @@
  * @package block_flexpagemod
  */
 
-$plugin->version      = 2017120800;
+$plugin->version      = 2018080800;
 $plugin->requires     = 2017111300;
 $plugin->component    = 'block_flexpagemod';
-$plugin->release      = '3.4.1';
+$plugin->release      = '3.4.3';
 $plugin->maturity     = MATURITY_STABLE;
-$plugin->dependencies = array('format_flexpage' => 2017120800);
+$plugin->dependencies = array('format_flexpage' => 2018080800);
